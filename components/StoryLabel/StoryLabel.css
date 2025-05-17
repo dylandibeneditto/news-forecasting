@@ -1,0 +1,46 @@
+.story {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    padding: 10px;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.story:hover {
+    background: rgba(0,0,0,0.05);
+    transition: background 0.3s ease;
+}
+
+.story-title {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.story-topics {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.story-content {
+    font-size: 12px;
+    color: var(--secondary);
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.story-meta {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+}
+
+.story-meta > * {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--tertiary);
+}

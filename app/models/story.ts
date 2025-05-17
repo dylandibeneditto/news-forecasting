@@ -78,12 +78,8 @@ export class StoryManager {
     if (!story) throw new Error('Story not found');
 
     try {
-      const response = await fetch(`/api/predictions?storyId=${storyId}&tone=${tone}`);
-      if (!response.ok) {
-        throw new Error('Failed to generate predictions');
-      }
-      
-      const predictions = await response.json();
+      const predictionService = await import('../services/predictionService');
+      const predictions = await predictionService.default.generatePredictions(story, tone);
       story.predictions = predictions;
       this.cache[storyId] = story;
       return predictions;

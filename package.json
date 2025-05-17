@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "dotenv": "^16.5.0",
     "newsapi": "^2.4.1",
     "next": "15.3.2",

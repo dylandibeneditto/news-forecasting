@@ -1,9 +1,8 @@
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { Story, Timeline } from '../models/story';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Configure Gemini client
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
 class PredictionService {
   private static instance: PredictionService;
@@ -17,43 +16,71 @@ class PredictionService {
     return PredictionService.instance;
   }
 
+  private generatePromptForTimeframe(
+    story: Story,
+    timeframe: Timeline['timeframe'],
+    tone: Timeline['tone']
+  ): string {
+    return `You are a future prediction expert. Analyze this news story and generate a ${tone} prediction for ${timeframe} into the future.
+
+News Story:
+Title: ${story.title}
+Description: ${story.description}
+
+Based on this news, create a prediction that is:
+1. ${tone.charAt(0).toUpperCase() + tone.slice(1)} in tone
+2. Focused on developments ${timeframe} into the future
+3. Grounded in current trends and realistic possibilities
+4. Specific and detailed in its implications
+
+Format your response exactly like this example:
+Title: [A compelling title for this future prediction]
+Summary: [2-3 sentences explaining the prediction]
+Probability: [A number between 1-100 representing the likelihood]
+
+Remember to:
+- Be creative but plausible
+- Consider technological, social, and economic factors
+- Maintain the ${tone} perspective throughout
+- Provide specific details and consequences`;
+  }
+
   private async generatePredictionForTimeframe(
     story: Story,
     timeframe: Timeline['timeframe'],
     tone: Timeline['tone']
   ): Promise<Timeline> {
-    const prompt = `Based on this news story:
-Title: ${story.title}
-Description: ${story.description}
-
-Generate a ${tone} prediction for what might happen in ${timeframe}. 
-The prediction should be a concise 2-3 sentence summary.
-Also include a probability estimate (0-100) of this outcome.
-Format: Title | Summary | Probability`;
-
     try {
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 200
+      const prompt = this.generatePromptForTimeframe(story, timeframe, tone);
+      
+      // Get the Gemini Pro model
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-2.0-flash",
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 500,
+        }
       });
 
-      const response = completion.choices[0].message.content || '';
-      const [title, summary, probabilityStr] = response.split('|').map(s => s.trim());
-      const probability = parseInt(probabilityStr.replace('%', '')) || 50;
+      // Generate the response
+      const result = await model.generateContent(prompt);
+      const response = await result.response.text();
+      
+      // Parse the response
+      const titleMatch = response.match(/Title: (.*)\n/);
+      const summaryMatch = response.match(/Summary: (.*)\n/);
+      const probabilityMatch = response.match(/Probability: (\d+)/);
+
+      if (!titleMatch || !summaryMatch || !probabilityMatch) {
+        throw new Error('Invalid response format from Gemini');
+      }
 
       return {
         timeframe,
-        title,
-        summary,
+        title: titleMatch[1],
+        summary: summaryMatch[1],
         tone,
-        probability
+        probability: parseInt(probabilityMatch[1])
       };
     } catch (error) {
       console.error('Error generating prediction:', error);
@@ -62,14 +89,19 @@ Format: Title | Summary | Probability`;
   }
 
   async generatePredictions(story: Story, tone: Timeline['tone']): Promise<Timeline[]> {
+    if (!process.env.GOOGLE_API_KEY) {
+      throw new Error('GOOGLE_API_KEY is not configured');
+    }
+
     const timeframes: Timeline['timeframe'][] = ['1month', '1year', '10years'];
     
     try {
-      const predictions = await Promise.all(
-        timeframes.map(timeframe => 
-          this.generatePredictionForTimeframe(story, timeframe, tone)
-        )
-      );
+      // Generate predictions in sequence to avoid rate limiting
+      const predictions = [];
+      for (const timeframe of timeframes) {
+        const prediction = await this.generatePredictionForTimeframe(story, timeframe, tone);
+        predictions.push(prediction);
+      }
       
       return predictions;
     } catch (error) {

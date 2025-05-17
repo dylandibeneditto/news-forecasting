@@ -46,10 +46,25 @@ export default function Home() {
     
     setGeneratingPrediction(true);
     try {
-      await storyManager.generatePredictions(selectedStory.id, predictionTone);
-      setSelectedStory(storyManager.getStoryById(selectedStory.id) || null);
+      const response = await fetch(
+        `/api/predictions?` + new URLSearchParams({
+          storyId: selectedStory.id,
+          title: selectedStory.title,
+          description: selectedStory.description || '',
+          tone: predictionTone
+        })
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate predictions');
+      }
+
+      const predictions = await response.json();
+      selectedStory.predictions = predictions;
+      setSelectedStory({ ...selectedStory });
     } catch (err) {
-      setError("Failed to generate predictions");
+      setError(err instanceof Error ? err.message : "Failed to generate predictions");
       console.error(err);
     } finally {
       setGeneratingPrediction(false);

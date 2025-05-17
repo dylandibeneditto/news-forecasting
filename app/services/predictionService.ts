@@ -1,42 +1,82 @@
 import OpenAI from 'openai';
+import type { Story, Timeline } from '../models/story';
 
-export class PredictionService {
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+class PredictionService {
   private static instance: PredictionService;
-  private openai: OpenAI;
 
-  private constructor() {
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
-    });
-  }
+  private constructor() {}
 
-  public static getInstance(): PredictionService {
+  static getInstance(): PredictionService {
     if (!PredictionService.instance) {
       PredictionService.instance = new PredictionService();
     }
     return PredictionService.instance;
   }
 
-  async predictTrend(storyTitle: string, storyContent: string): Promise<string> {
+  private async generatePredictionForTimeframe(
+    story: Story,
+    timeframe: Timeline['timeframe'],
+    tone: Timeline['tone']
+  ): Promise<Timeline> {
+    const prompt = `Based on this news story:
+Title: ${story.title}
+Description: ${story.description}
+
+Generate a ${tone} prediction for what might happen in ${timeframe}. 
+The prediction should be a concise 2-3 sentence summary.
+Also include a probability estimate (0-100) of this outcome.
+Format: Title | Summary | Probability`;
+
     try {
-      const completion = await this.openai.chat.completions.create({
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4",
         messages: [
           {
-            role: "system",
-            content: "You are an expert at analyzing news stories and predicting future trends based on current events. Provide concise, realistic predictions."
-          },
-          {
             role: "user",
-            content: `Based on this news story titled "${storyTitle}" with content: "${storyContent}", what are the likely future developments and implications in the next few months? Keep the response under 200 words.`
+            content: prompt
           }
         ],
-        model: "gpt-4-turbo-preview",
+        temperature: 0.7,
+        max_tokens: 200
       });
 
-      return completion.choices[0]?.message?.content || "Unable to generate prediction";
+      const response = completion.choices[0].message.content || '';
+      const [title, summary, probabilityStr] = response.split('|').map(s => s.trim());
+      const probability = parseInt(probabilityStr.replace('%', '')) || 50;
+
+      return {
+        timeframe,
+        title,
+        summary,
+        tone,
+        probability
+      };
     } catch (error) {
       console.error('Error generating prediction:', error);
-      return "Unable to generate prediction at this time";
+      throw error;
+    }
+  }
+
+  async generatePredictions(story: Story, tone: Timeline['tone']): Promise<Timeline[]> {
+    const timeframes: Timeline['timeframe'][] = ['1month', '1year', '10years'];
+    
+    try {
+      const predictions = await Promise.all(
+        timeframes.map(timeframe => 
+          this.generatePredictionForTimeframe(story, timeframe, tone)
+        )
+      );
+      
+      return predictions;
+    } catch (error) {
+      console.error('Error generating predictions:', error);
+      throw error;
     }
   }
 }
+
+export default PredictionService.getInstance();

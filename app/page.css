@@ -1,3 +1,97 @@
 html {
     background: var(--background);
 }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.stories-section {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.prediction-section {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.story-item {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease;
+}
+
+.story-item:hover {
+    background-color: #f3f4f6;
+}
+
+.story-item.selected {
+    background-color: #e5e7eb;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+select {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    background-color: white;
+}
+
+.time-travel-btn {
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.time-travel-btn:hover {
+    background-color: #2563eb;
+}
+
+.time-travel-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.loading {
+    color: #6b7280;
+    text-align: center;
+    padding: 1rem;
+}
+
+.error {
+    color: #ef4444;
+    background-color: #fee2e2;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    margin: 0 0 1rem 0;
+    color: #1f2937;
+    font-size: 1.5rem;
+    font-weight: 600;
+}

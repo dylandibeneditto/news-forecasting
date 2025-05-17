@@ -1,85 +1,62 @@
-.story {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    padding: 10px;
-    gap: 10px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
+.story-label {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  background-color: white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.story:hover {
-    background: rgba(0,0,0,0.05);
-    transition: background 0.3s ease;
+.story-label:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .story-title {
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: -1px;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
 }
 
-.story-topics {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.story-content {
-    font-size: 12px;
-    color: var(--secondary);
-    max-height: 40px;
-    overflow: hidden;
+.story-description {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .story-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.story-meta > * {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--tertiary);
-}
-
-.story-prediction {
-    background: rgba(0, 0, 0, 0.02);
-    padding: 15px;
-    border-radius: 8px;
-    margin: 10px 0;
-    border-left: 3px solid var(--primary);
-}
-
-.story-prediction h4 {
-    margin: 0 0 8px 0;
-    color: var(--primary);
-    font-size: 14px;
-}
-
-.story-prediction p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
-    color: var(--secondary);
-}
-
-.story-prediction small {
-    display: block;
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--tertiary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: #6b7280;
 }
 
 .story-source {
-    font-size: 12px;
-    color: var(--tertiary);
-    margin-right: 10px;
+  font-weight: 500;
 }
 
-.spacer {
-    flex-grow: 1;
+.story-date {
+  color: #9ca3af;
+}
+
+.story-link {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: #3b82f6;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.story-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
 }

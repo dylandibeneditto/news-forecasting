@@ -2,9 +2,8 @@
 import { useEffect, useState } from "react";
 import "./page.css";
 import StoryLabel from "@/components/StoryLabel/StoryLabel";
-import TimelineView from "@/components/Timeline/Timeline";
 import { StoryManager } from "@/app/models/story";
-import type { Story, Timeline } from "@/app/models/story";
+import type { Story } from "@/app/models/story";
 
 const storyManager = StoryManager.getInstance();
 
@@ -12,9 +11,6 @@ export default function Home() {
   const [stories, setStories] = useState(storyManager.getAllStories());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedStory, setSelectedStory] = useState<Story | null>(null);
-  const [predictionTone, setPredictionTone] = useState<Timeline['tone']>('realistic');
-  const [generatingPrediction, setGeneratingPrediction] = useState(false);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -37,85 +33,23 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleStorySelect = (story: Story) => {
-    setSelectedStory(story);
-  };
-
-  const generatePredictions = async () => {
-    if (!selectedStory) return;
-    
-    setGeneratingPrediction(true);
-    try {
-      const response = await fetch(
-        `/api/predictions?` + new URLSearchParams({
-          storyId: selectedStory.id,
-          title: selectedStory.title,
-          description: selectedStory.description || '',
-          tone: predictionTone
-        })
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to generate predictions');
-      }
-
-      const predictions = await response.json();
-      selectedStory.predictions = predictions;
-      setSelectedStory({ ...selectedStory });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate predictions");
-      console.error(err);
-    } finally {
-      setGeneratingPrediction(false);
-    }
-  };
-
   return (
     <div className="container">
       <main>
+        <h1 className="page-title">Trending Stories</h1>
+        <p className="page-description">
+          Click on any story to explore potential future outcomes using AI predictions.
+        </p>
+        
         <section className="stories-section">
-          <h2>Trending Stories</h2>
           {loading && <div className="loading">Loading latest stories...</div>}
           {error && <div className="error">{error}</div>}
           {stories.map((story) => (
-            <div
-              key={story.id}
-              onClick={() => handleStorySelect(story)}
-              className={`story-item ${selectedStory?.id === story.id ? 'selected' : ''}`}
-            >
+            <div key={story.id} className="story-item">
               <StoryLabel story={story} />
             </div>
           ))}
         </section>
-
-        {selectedStory && (
-          <section className="prediction-section">
-            <h2>Future Predictions</h2>
-            <div className="controls">
-              <select
-                value={predictionTone}
-                onChange={(e) => setPredictionTone(e.target.value as Timeline['tone'])}
-                disabled={generatingPrediction}
-              >
-                <option value="realistic">Realistic</option>
-                <option value="optimistic">Optimistic</option>
-                <option value="dystopian">Dystopian</option>
-              </select>
-              <button
-                onClick={generatePredictions}
-                disabled={generatingPrediction}
-                className="time-travel-btn"
-              >
-                {generatingPrediction ? 'Generating...' : '🚀 Time Travel'}
-              </button>
-            </div>
-            
-            {selectedStory.predictions.length > 0 && (
-              <TimelineView predictions={selectedStory.predictions} />
-            )}
-          </section>
-        )}
       </main>
     </div>
   );

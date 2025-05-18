@@ -28,7 +28,6 @@ export default function Home() {
 
     fetchStories();
     
-    // Refresh stories every 15 minutes
     const interval = setInterval(fetchStories, 15 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
@@ -39,6 +38,7 @@ export default function Home() {
         <h1 className="page-title">Trending Stories</h1>
         <p className="page-description">
           Click on any story to explore potential future outcomes using AI predictions.
+          <p className="disclaimer">⚠️ AI may generate incorrect results</p>
         </p>
         
         <section className="stories-section">

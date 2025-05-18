@@ -23,9 +23,14 @@ main {
 }
 
 .page-description {
-    margin: 0 0 2rem 0;
+    margin: 0 0 1rem 0;
     color: #6b7280;
     font-size: 1.125rem;
+}
+
+.disclaimer {
+    font-size: 12px;
+    margin-top: 4px;
 }
 
 .stories-section {
@@ -47,7 +52,7 @@ main {
     transition: background-color 0.2s ease;
 }
 
-.story-item:hover {
+.story-item:hover > * > * {
     background-color: #f3f4f6;
 }
 
@@ -66,6 +71,10 @@ select {
     border: 1px solid #d1d5db;
     border-radius: 0.25rem;
     background-color: white;
+}
+
+.tone-select {
+    color-scheme: light;
 }
 
 .time-travel-btn {

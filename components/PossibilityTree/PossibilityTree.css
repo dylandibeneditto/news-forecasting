@@ -1,0 +1,71 @@
+.possibility-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.possibility-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.possibility-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.possibility-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.possibility-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.possibility-scenario {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.possibility-probability {
+  background-color: #dbeafe;
+  color: #1e40af;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.consequences-section {
+  margin-top: 12px;
+}
+
+.consequences-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.consequences-list {
+  list-style-type: disc;
+  list-style-position: inside;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.consequences-list li {
+  margin-top: 4px;
+}
+
+.empty-message {
+  color: #6b7280;
+} 

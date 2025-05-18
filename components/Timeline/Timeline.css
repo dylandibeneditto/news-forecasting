@@ -1,70 +1,122 @@
-.timeline {
+.timeline-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  padding: 2rem;
-  position: relative;
+  gap: 48px;
 }
 
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 2rem;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: #3b82f6;
+/* Shared features section */
+.shared-features-section {
+  margin-bottom: 32px;
 }
 
-.timeline-node {
-  position: relative;
-  margin-left: 3rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+.shared-features-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
 }
 
-.timeline-node:hover {
-  transform: translateX(5px);
+/* Timeframes section */
+.timeframes-section {
+  margin-top: 24px;
 }
 
-.timeline-node::before {
-  content: '';
-  position: absolute;
-  left: -1.5rem;
-  top: 50%;
-  width: 1rem;
-  height: 1rem;
-  background: #3b82f6;
-  border-radius: 50%;
-  transform: translateY(-50%);
+.timeframes-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
 }
 
-.timeline-content {
-  padding: 1rem;
+.timeframe-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 32px;
+  margin-bottom: 32px;
 }
 
-.timeframe {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
+.timeframe-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-.timeline-content h3 {
-  margin: 0 0 0.5rem 0;
-  color: #1f2937;
-  font-size: 1.25rem;
+.timeframe-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-right: 8px;
 }
 
-.timeline-content p {
-  margin: 0 0 1rem 0;
+.timeframe-badge {
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.tone-optimistic {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.tone-pessimistic {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.tone-dystopian {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+.tone-neutral {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.timeframe-summary {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border-left: 4px solid #d1d5db;
+}
+
+.summary-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.summary-text {
   color: #4b5563;
+  margin-bottom: 12px;
+  line-height: 1.5;
 }
 
-.probability {
-  font-size: 0.875rem;
-  color: #3b82f6;
-  font-weight: 500;
+.probability-badge {
+  display: inline-block;
+  background-color: #f3f4f6;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 12px;
 }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.empty-message {
+  color: #6b7280;
+  padding: 16px;
+} 

@@ -1,0 +1,87 @@
+.trend-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.trend-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.trend-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .trend-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.trend-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.trend-info {
+  flex: 1;
+}
+
+.trend-name {
+  font-weight: 500;
+}
+
+.trend-value {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.trend-icon {
+  margin-left: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trend-up {
+  background-color: #dcfce7;
+}
+
+.trend-up span {
+  color: #16a34a;
+  font-size: 20px;
+}
+
+.trend-down {
+  background-color: #fee2e2;
+}
+
+.trend-down span {
+  color: #dc2626;
+  font-size: 20px;
+}
+
+.trend-stable {
+  background-color: #f3f4f6;
+}
+
+.trend-stable span {
+  color: #6b7280;
+  font-size: 20px;
+}
+
+.empty-message {
+  color: #6b7280;
+} 

@@ -1,13 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 
-export interface Timeline {
-  timeframe: '1month' | '1year' | '10years';
-  title: string;
-  summary: string;
-  tone: 'realistic' | 'optimistic' | 'dystopian';
-  probability: number;
-}
-
 export interface Story {
   id: string;
   title: string;
@@ -19,6 +11,42 @@ export interface Story {
     name: string;
   };
   predictions: Timeline[];
+}
+
+export interface Trend {
+  name: string;
+  direction: 'up' | 'down' | 'stable';
+  value: number;
+}
+
+export interface Possibility {
+  scenario: string;
+  probability: number;
+  consequences: string[];
+}
+
+export interface HistoricAnalogy {
+  event: string;
+  year: string;
+  similarity: number;
+  lessons: string;
+}
+
+export interface IndustryImpact {
+  name: string;
+  impact: number;
+}
+
+export interface Timeline {
+  timeframe: '1month' | '1year' | '10years';
+  title: string;
+  summary: string;
+  tone: 'realistic' | 'optimistic' | 'pessimistic';
+  probability: number;
+  trends: Trend[];
+  possibilities: Possibility[];
+  historicAnalogies: HistoricAnalogy[];
+  impactedIndustries: IndustryImpact[];
 }
 
 export class StoryManager {

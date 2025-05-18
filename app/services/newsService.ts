@@ -19,7 +19,6 @@ class NewsService {
         headers: {
           'Accept': 'application/json',
         },
-        // Prevent caching of the request
         cache: 'no-store'
       });
 
@@ -30,7 +29,6 @@ class NewsService {
       
       const stories = await response.json();
       
-      // Validate the response format
       if (!Array.isArray(stories)) {
         throw new Error('Invalid response format from API');
       }

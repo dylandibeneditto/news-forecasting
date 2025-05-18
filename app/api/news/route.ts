@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { Story } from '@/app/models/story';
 
-// Configure to use Node.js runtime instead of Edge
 export const runtime = 'nodejs';
 
-// Direct fetch implementation for NewsAPI
 const NEWS_API_KEY = process.env.NEWS_API_KEY;
 const NEWS_API_BASE_URL = 'https://newsapi.org/v2';
 
@@ -34,7 +32,6 @@ export async function GET() {
         headers: {
           'X-Api-Key': NEWS_API_KEY,
         },
-        // Required for NewsAPI to work
         cache: 'no-store',
       }
     );

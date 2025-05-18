@@ -2,10 +2,8 @@ import { NextResponse } from 'next/server';
 import type { Timeline } from '@/app/models/story';
 import NodeCache from 'node-cache';
 
-// Configure for Node.js runtime (required for OpenAI)
 export const runtime = 'nodejs';
 
-// Cache predictions for 1 hour
 const cache = new NodeCache({ stdTTL: 3600 });
 
 export async function GET(request: Request) {
@@ -23,23 +21,20 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Check cache first
     const cacheKey = `${storyId}-${tone}`;
     const cachedPredictions = cache.get(cacheKey);
     if (cachedPredictions) {
       return NextResponse.json(cachedPredictions);
     }
 
-    // Validate the tone
-    const validTones: Timeline['tone'][] = ['realistic', 'optimistic', 'dystopian'];
+    const validTones: Timeline['tone'][] = ['realistic', 'optimistic', 'pessimistic'];
     if (!validTones.includes(tone)) {
       return NextResponse.json(
-        { error: 'Invalid tone parameter. Must be one of: realistic, optimistic, dystopian' },
+        { error: `Invalid tone parameter. Must be one of: ${validTones.join(', ')}` },
         { status: 400 }
       );
     }
 
-    // Generate predictions using the prediction service directly
     const predictionService = await import('@/app/services/predictionService');
     const predictions = await predictionService.default.generatePredictions(
       { 
@@ -54,18 +49,16 @@ export async function GET(request: Request) {
       tone
     );
 
-    // Cache the predictions
     cache.set(cacheKey, predictions);
     
     return NextResponse.json(predictions);
   } catch (error) {
     console.error('Error generating predictions:', error);
     
-    // Handle specific error types
     if (error instanceof Error) {
-      if (error.message.includes('OPENAI_API_KEY')) {
+      if (error.message.includes('OPENAI_API_KEY') || error.message.includes('GOOGLE_API_KEY')) {
         return NextResponse.json(
-          { error: 'OpenAI API configuration error' },
+          { error: 'API configuration error' },
           { status: 500 }
         );
       }
